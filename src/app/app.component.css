@@ -1,0 +1,45 @@
+input, label {
+  display:block;
+}
+
+input {
+  margin-bottom: 1rem;
+}
+
+.invalid-input {
+  border-color: red;
+}
+
+.invalid-text {
+  color: red;
+}
+
+table {
+  width: 500px;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+th, td {
+  border: 1px solid;
+}
+
+tr td:last-child {
+  white-space:nowrap;
+}
+
+td button:first-child {
+  margin-right: 0.5rem;
+}
+
+button[type="reset"] {
+  margin-left: 0.5rem;
+}
+
+.menu {
+  margin-bottom: 1rem;
+}
+
+.menu button {
+  margin-right: 0.5rem;
+}
