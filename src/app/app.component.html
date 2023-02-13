@@ -1,13 +1,38 @@
-<div class="header">
-  <h1>{{ title }}</h1>
-</div>
-
 <div>
-  <label>Zadajte názov projektu:
-    <input #projectTitle type="text" [value]="title"/>
-  </label>
+  <button (click)="changeMenu(menu.USERS)">POUŽÍVATELIA</button>
+  <button (click)="changeMenu(menu.BOOKS)">KNIHY</button>
+  <button (click)="changeMenu(menu.BORROWINGS)">VÝPOŽIČKY</button>
 </div>
 
-<button (click)="changeProjectTitle(projectTitle.value)">
-  Zmeniť názov
-</button>
+<ng-container *ngIf="actualMenu === menu.USERS">
+  <h3>POUŽÍVATELIA</h3>
+  <form [formGroup]="form">
+    <label>Meno:
+      <input type="text" formControlName="name"/>
+    </label>
+    <label>Priezvisko:
+      <input type="text" formControlName="surname"/>
+    </label>
+
+    <button type="button" (click)="savePerson()">Uložiť</button>
+  </form>
+
+  <table *ngIf="persons.length">
+    <tr>
+      <th>Meno</th>
+      <th>Priezvisko</th>
+    </tr>
+    <tr *ngFor="let person of persons">
+      <td>{{ person.name }}</td>
+      <td>{{ person.surname }}</td>
+    </tr>
+  </table>
+</ng-container>
+
+<ng-container *ngIf="actualMenu === menu.BOOKS">
+  <h3>KNIHY</h3>
+</ng-container>
+
+<ng-container *ngIf="actualMenu === menu.BORROWINGS">
+  <h3>VÝPOŽIČKY</h3>
+</ng-container>

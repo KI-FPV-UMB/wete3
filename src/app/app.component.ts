@@ -1,4 +1,11 @@
 import { Component } from '@angular/core';
+import {FormGroup, FormControl} from "@angular/forms";
+
+export enum Menu {
+  BOOKS = 'BOOKS',
+  USERS = 'USERS',
+  BORROWINGS = 'BORROWINGS'
+}
 
 @Component({
   selector: 'app-root',
@@ -6,9 +13,29 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'Názov projektu';
+  form: FormGroup;
 
-  changeProjectTitle(title: string): void {
-    this.title = title;
+  persons: Array<{
+    name: string,
+    surname: string
+  }> = [];
+
+  menu = Menu;
+  actualMenu = Menu.USERS;
+
+  constructor() {
+    this.form = new FormGroup({
+      name: new FormControl(),
+      surname: new FormControl()
+    })
+  }
+
+  savePerson(): void {
+    this.persons.push(this.form.value);
+    this.form.reset();
+  }
+
+  changeMenu(menuItem: Menu): void {
+    this.actualMenu = menuItem;
   }
 }
