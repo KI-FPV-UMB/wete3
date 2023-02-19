@@ -1,11 +1,6 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-
-export enum Menu {
-  BOOKS = 'BOOKS',
-  USERS = 'USERS',
-  BORROWINGS = 'BORROWINGS'
-}
+import {Menu, User} from './common/model/user.model';
 
 @Component({
   selector: 'app-root',
@@ -16,11 +11,7 @@ export class AppComponent {
 
   form: FormGroup;
 
-  persons: Array<{
-    id: number,
-    name: string;
-    surname: string
-  }> = [];
+  persons: Array<User> = [];
 
   menu = Menu;
 

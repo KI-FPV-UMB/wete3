@@ -6,6 +6,7 @@
 
 <ng-container *ngIf="actualMenu === menu.USERS">
   <h3>POUŽÍVATELIA</h3>
+  <router-outlet></router-outlet>
   <form [formGroup]="form" (submit)="savePerson()">
     <label>Meno:
       <input type="text" formControlName="name" [class.invalid-input]="form.controls.name.invalid && (form.controls.name.touched || form.controls.name.dirty)" />
