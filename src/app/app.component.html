@@ -1,32 +1,10 @@
 <div>
-  <button (click)="changeMenu(menu.USERS)">POUŽÍVATELIA</button>
+  <button routerLink="/user">POUŽÍVATELIA</button>
   <button (click)="changeMenu(menu.BOOKS)">KNIHY</button>
   <button (click)="changeMenu(menu.BORROWINGS)">VÝPOŽIČKY</button>
 </div>
-
 <ng-container *ngIf="actualMenu === menu.USERS">
-  <h3>POUŽÍVATELIA</h3>
-  <form [formGroup]="form">
-    <label>Meno:
-      <input type="text" formControlName="name"/>
-    </label>
-    <label>Priezvisko:
-      <input type="text" formControlName="surname"/>
-    </label>
-
-    <button type="button" (click)="savePerson()">Uložiť</button>
-  </form>
-
-  <table *ngIf="persons.length">
-    <tr>
-      <th>Meno</th>
-      <th>Priezvisko</th>
-    </tr>
-    <tr *ngFor="let person of persons">
-      <td>{{ person.name }}</td>
-      <td>{{ person.surname }}</td>
-    </tr>
-  </table>
+  <router-outlet></router-outlet>
 </ng-container>
 
 <ng-container *ngIf="actualMenu === menu.BOOKS">
