@@ -1,0 +1,19 @@
+<table *ngIf="persons.length">
+  <tr>
+    <th>Meno</th>
+    <th>Priezvisko</th>
+    <th style="width: 20px"></th>
+  </tr>
+  <tr *ngFor="let person of persons">
+    <td>{{ person.name }}</td>
+    <td>{{ person.surname }}</td>
+    <td>
+      <button (click)="updatePerson(person.id)">
+        Upraviť
+      </button>
+      <button (click)="deletePerson(person.id)">
+        Zmazať
+      </button>
+    </td>
+  </tr>
+</table>

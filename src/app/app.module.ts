@@ -4,17 +4,25 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UserPageComponent } from './user/user-page/user-page.component';
+import { UserFormComponent } from './user/user-form/user-form.component';
+import { UserListComponent } from './user/user-list/user-list.component';
+import { BookPageComponent } from './book/book-page/book-page.component';
+import { BorrowingPageComponent } from './borrowing/borrowing-page/borrowing-page.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    UserPageComponent
+    UserPageComponent,
+    UserFormComponent,
+    UserListComponent,
+    BookPageComponent,
+    BorrowingPageComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    AppRoutingModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

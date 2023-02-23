@@ -1,59 +1,13 @@
 <div class="menu">
-  <button (click)="changeMenu(menu.USERS)">POUŽÍVATELIA</button>
-  <button (click)="changeMenu(menu.BOOKS)">KNIHY</button>
-  <button (click)="changeMenu(menu.BORROWINGS)">VÝPOŽIČKY</button>
+  <button routerLink="user">
+    POUŽÍVATELIA
+  </button>
+  <button routerLink="book">
+    KNIHY
+  </button>
+  <button routerLink="borrowing">
+    VÝPOŽIČKY
+  </button>
 </div>
 
-<ng-container *ngIf="actualMenu === menu.USERS">
-  <h3>POUŽÍVATELIA</h3>
-  <router-outlet></router-outlet>
-  <form [formGroup]="form" (submit)="savePerson()">
-    <label>Meno:
-      <input type="text" formControlName="name" [class.invalid-input]="form.controls.name.invalid && (form.controls.name.touched || form.controls.name.dirty)" />
-    </label>
-    <p *ngIf="form.controls.name.invalid && (form.controls.name.touched || form.controls.name.dirty)" class="invalid-text">
-      Zadajte meno
-    </p>
-
-    <label>Priezvisko:
-      <input type="text" formControlName="surname" [class.invalid-input]="form.controls.surname.invalid && (form.controls.surname.touched || form.controls.surname.dirty)" />
-    </label>
-    <p *ngIf="(form.controls.surname.touched || form.controls.surname.dirty) && form.controls.surname.errors?.required" class="invalid-text">
-      Zadajte priezvisko
-    </p>
-    <p *ngIf="(form.controls.surname.touched || form.controls.surname.dirty) && form.controls.surname.errors?.minlength" class="invalid-text">
-      Minimálna dĺžka priezviska sú 3 znaky
-    </p>
-
-    <button type="submit" [disabled]="form.invalid">Uložiť</button>
-    <button type="reset">Zrušiť</button>
-  </form>
-
-  <table *ngIf="persons.length">
-    <tr>
-      <th>Meno</th>
-      <th>Priezvisko</th>
-      <th style="width: 20px"></th>
-    </tr>
-    <tr *ngFor="let person of persons; let i = index">
-      <td>{{ person.name }}</td>
-      <td>{{ person.surname }}</td>
-      <td>
-        <button (click)="editPerson(i)">
-          Upraviť
-        </button>
-        <button (click)="deletePerson(i)">
-          Zmazať
-        </button>
-      </td>
-    </tr>
-  </table>
-</ng-container>
-
-<ng-container *ngIf="actualMenu === menu.BOOKS">
-  <h3>KNIHY</h3>
-</ng-container>
-
-<ng-container *ngIf="actualMenu === menu.BORROWINGS">
-  <h3>VÝPOŽIČKY</h3>
-</ng-container>
+<router-outlet></router-outlet>

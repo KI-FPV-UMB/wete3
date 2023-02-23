@@ -1,1 +1,13 @@
-<p>user-page works!</p>
+<h3>POUŽÍVATELIA</h3>
+
+<app-user-form
+  [personData]="person"
+  (personToCreate)="createPerson($event)"
+  (personToUpdate)="updatePerson($event)">
+</app-user-form>
+
+<app-user-list
+  [persons]="persons"
+  (personToUpdate)="selectPersonToUpdate($event)"
+  (personToDelete)="deletePerson($event)">
+</app-user-list>
