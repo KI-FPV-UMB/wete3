@@ -17,10 +17,10 @@ export class UserFormComponent {
   }
 
   @Output()
-  personToCreate = new EventEmitter<User>();
+  formCreate = new EventEmitter<User>();
 
   @Output()
-  personToUpdate = new EventEmitter<User>();
+  formUpdate = new EventEmitter<User>();
 
   form: FormGroup;
 
@@ -35,9 +35,9 @@ export class UserFormComponent {
   savePerson(): void {
     if (this.form.valid) {
       if (this.form.controls.id.value) {
-        this.personToUpdate.emit(this.prepareUser(this.form.controls.id.value));
+        this.formUpdate.emit(this.prepareUser(this.form.controls.id.value));
       } else {
-        this.personToCreate.emit(this.prepareUser());
+        this.formCreate.emit(this.prepareUser());
       }
       this.form.reset();
     }

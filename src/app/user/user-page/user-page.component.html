@@ -2,8 +2,8 @@
 
 <app-user-form
   [personData]="person"
-  (personToCreate)="createPerson($event)"
-  (personToUpdate)="updatePerson($event)">
+  (formCreate)="createPerson($event)"
+  (formUpdate)="updatePerson($event)">
 </app-user-form>
 
 <app-user-list
