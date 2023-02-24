@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {User} from '../../common/model/user.model';
 
@@ -7,12 +7,22 @@ import {User} from '../../common/model/user.model';
   templateUrl: './user-form.component.html',
   styleUrls: ['./user-form.component.css']
 })
-export class UserFormComponent {
+export class UserFormComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input()
   set personData(person: User | undefined) {
     if (person) {
       this.form.setValue(person);
+    }
+  }
+
+  @Input()
+  helpData?: string;
+
+  @Input()
+  set helpDataSetter(helpData: string) {
+    if (helpData) {
+      console.log('SETTER:', helpData);
     }
   }
 
@@ -25,11 +35,28 @@ export class UserFormComponent {
   form: FormGroup;
 
   constructor() {
+    console.log('CONSTRUCTOR');
+    console.log('CONSTRUCTOR HELP DATA:', this.helpData);
     this.form = new FormGroup({
       id: new FormControl(null),
       name: new FormControl(null, Validators.required),
       surname: new FormControl(null, [Validators.required, Validators.minLength(3)])
     })
+  }
+
+  ngOnInit(): void {
+    console.log('ON INIT');
+    console.log('ON INIT HELP DATA:', this.helpData);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.helpData?.currentValue) {
+      console.log('ON CHANGES HELP DATA:', this.helpData);
+    }
+  }
+
+  ngOnDestroy(): void {
+    console.log('ON DESTROY');
   }
 
   savePerson(): void {
