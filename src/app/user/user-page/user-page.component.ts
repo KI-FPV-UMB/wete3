@@ -1,5 +1,6 @@
 import {Component} from '@angular/core';
 import {User} from '../../common/model/user.model';
+import {HttpClient} from '@angular/common/http';
 
 @Component({
   selector: 'app-user-page',
@@ -12,16 +13,28 @@ export class UserPageComponent {
 
   person?: User;
 
+  constructor(private http: HttpClient) {
+    this.getPersons();
+  }
+
+  getPersons(): void {
+    this.http.get<User[]>('http://labs.fpv.umb.sk:8080/api/customers').subscribe((persons: User[]) => {
+      this.persons = persons;
+    });
+  }
+
   createPerson(person: User): void {
-    this.persons.push(person);
+    this.http.post('http://labs.fpv.umb.sk:8080/api/customers', person).subscribe(() => {
+      console.log('Osoba bola úspešne uložená.');
+      this.getPersons();
+    })
   }
 
   updatePerson(person: User): void {
-    const index = this.persons.findIndex(person => person.id === person.id);
-    if (index !== -1) {
-      this.persons[index] = person;
-      this.person = undefined;
-    }
+    this.http.put(`http://labs.fpv.umb.sk:8080/api/customers/${person.id}`, person).subscribe(() => {
+      console.log('Osoba bola úspešne zmenená.');
+      this.getPersons();
+    })
   }
 
   selectPersonToUpdate(personId: number): void {
@@ -29,7 +42,9 @@ export class UserPageComponent {
   }
 
   deletePerson(personId: number): void {
-    const index = this.persons.findIndex(person => person.id === personId);
-    if (index !== -1) { this.persons.splice(index, 1); }
+    this.http.delete(`http://labs.fpv.umb.sk:8080/api/customers/${personId}`).subscribe(() => {
+      console.log('Osoba bola úspešne zmazaná.');
+      this.getPersons();
+    })
   }
 }
