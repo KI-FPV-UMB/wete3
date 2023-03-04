@@ -1,7 +1,9 @@
 import {Component} from '@angular/core';
 import {User} from '../../common/model/user.model';
-import {HttpClient} from '@angular/common/http';
+import {UserService} from '../../common/service/user.service';
+import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 
+@UntilDestroy()
 @Component({
   selector: 'app-user-page',
   templateUrl: './user-page.component.html',
@@ -13,36 +15,38 @@ export class UserPageComponent {
 
   person?: User;
 
-  constructor(private http: HttpClient) {
+  constructor(private service: UserService) {
     this.getPersons();
   }
 
   getPersons(): void {
-    this.http.get<User[]>('http://labs.fpv.umb.sk:8080/api/customers').subscribe((persons: User[]) => {
+    this.service.getUsers().pipe(untilDestroyed(this)).subscribe((persons: User[]) => {
       this.persons = persons;
     });
   }
 
   createPerson(person: User): void {
-    this.http.post('http://labs.fpv.umb.sk:8080/api/customers', person).subscribe(() => {
+    this.service.createUser(person).pipe(untilDestroyed(this)).subscribe(() => {
       console.log('Osoba bola úspešne uložená.');
       this.getPersons();
     })
   }
 
   updatePerson(person: User): void {
-    this.http.put(`http://labs.fpv.umb.sk:8080/api/customers/${person.id}`, person).subscribe(() => {
+    this.service.updateUser(person).pipe(untilDestroyed(this)).subscribe(() => {
       console.log('Osoba bola úspešne zmenená.');
       this.getPersons();
     })
   }
 
   selectPersonToUpdate(personId: number): void {
-    this.person = this.persons.find(person => person.id === personId);
+    this.service.getUser(personId).pipe(untilDestroyed(this)).subscribe((person: User) => {
+      this.person = person;
+    });
   }
 
   deletePerson(personId: number): void {
-    this.http.delete(`http://labs.fpv.umb.sk:8080/api/customers/${personId}`).subscribe(() => {
+    this.service.deleteUser(personId).pipe(untilDestroyed(this)).subscribe(() => {
       console.log('Osoba bola úspešne zmazaná.');
       this.getPersons();
     })

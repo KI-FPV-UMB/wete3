@@ -9,6 +9,7 @@ import { UserListComponent } from './user/user-list/user-list.component';
 import { BookPageComponent } from './book/book-page/book-page.component';
 import { BorrowingPageComponent } from './borrowing/borrowing-page/borrowing-page.component';
 import {HttpClientModule} from '@angular/common/http';
+import {UserService} from './common/service/user.service';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,9 @@ import {HttpClientModule} from '@angular/common/http';
     AppRoutingModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [
+    UserService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
