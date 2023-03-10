@@ -8,191 +8,227 @@ Basic functions of application:
 
 ## Domain model
 
+```plantuml
+
+class Book {
+
+}
+
+class BookCategory {
+
+}
+
+class Customer {
+
+}
+
+class Borrowing {
+
+}
+
+```
+
+## FE requirements
+- component for each feature (Book, BookCategory, Customer, Borrowing)
+- usage of Angular Forms
+- navigation between features by Routing
+- ...
 
 # API
-## Customers
-### Create customer
-```
-POST http://localhost:8080/api/customers
+API is specified using OpenAPI v3. You can render this API via [Swagger editor](https://editor.swagger.io/).
 
-REQUEST BODY: {
-"firstname": "Janko",
-"lastname": "Mrkvicka",
-"contact": "janko.mrkvicka@example.com"
-}
-```
+## OpenAPI
+```yaml
+openapi: 3.0.3
+info:
+  title: Wete3 Library - OpenAPI
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.11
+tags:
+  - name: bookCategories
+    description: Book categories such as Romance, Sci-fi etc.
+  - name: books
+    description: Books such as Dune, Lord of the rings etc.
+  - name: customers
+    description: Customers - as people who can borrow a book.
+  - name: borrowings
+    description: Which book is borrowed by which customer.
 
-### List customers
-```
-GET http://localhost:8080/api/customers?lastname=<customer last name search string>
+paths:
+  /books:
+    post:
+      tags:
+        - books
+      summary: Create book
+      operationId: createBook
+      requestBody:
+        description: Update an existent pet in the store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateBookDto'
+        required: true
+      responses:
+        '201':
+          description: CREATED
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookDto'
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '405':
+          description: Validation exception
+    get:
+      tags:
+        - books
+      summary: Get all books or filtered by name
+      operationId: getBooks
+      parameters:
+        - name: firstName
+          in: query
+          description: First name to filter with
+          required: false
+          schema:
+            type: string
+        - name: lastName
+          in: query
+          description: Last name to filter with
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BooksDto'
+        '405':
+          description: Invalid input
 
-RESPONSE BODY: [
-    {
-    "id": 1,
-    "name": "Janko Mrkvicka",
-    "contact": "janko.mrkvicka@example.com"
-    },
-    {
-    "id": 2,
-    "name": "Jozko Hrach",
-    "contact": "jozko.hrach@example.com"    
-    }
-]
-```
+  /books/{bookId}:
+    get:
+      tags:
+        - books
+      summary: Find book by ID
+      operationId: getBookById
+      parameters:
+        - name: bookId
+          in: path
+          description: ID of book to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookDto'
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+    put:
+      tags:
+        - books
+      summary: Updates a book
+      operationId: updateBook
+      parameters:
+        - name: bookId
+          in: path
+          description: ID of book that needs to be updated
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateBookDto'
+      responses:
+        '405':
+          description: Invalid input
 
-### Get customer by id
-```
-GET http://localhost:8080/api/customers/{customerId}
+    delete:
+      tags:
+        - books
+      summary: Deletes a book
+      operationId: deleteBook
+      parameters:
+        - name: bookId
+          in: path
+          description: Book id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '400':
+          description: Bad request
 
-RESPONSE BODY: {
-    "id": 1,
-    "name": "Janko Mrkvicka",
-    "contact": "janko.mrkvicka@example.com"
-}
-```
+components:
+  schemas:
+    CreateBookDto:
+      required:
+        - name
+        - category
+      properties:
+        name:
+          type: string
+          example: Dune
+        number:
+          type: integer
+          format: int64
+          example: 117
+          default: 0
+        category:
+          $ref: '#/components/schemas/BookCategoryDto'
 
-### Update customer
-```
-PUT http://localhost:8080/api/customers/{customerId}
+    BookDto:
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        name:
+          type: string
+          example: Surely you're joking Mr Feynman!
+        category:
+          $ref: '#/components/schemas/BookCategoryDto'
+        number:
+          type: integer
+          format: int64
+          example: 45
+        status:
+          type: string
+          description: book status for borrow
+          enum:
+            - AVAILABLE
+            - NOT_AVAILABLE
+    BooksDto:
+      properties:
+        books:
+          type: array
+          items:
+            $ref: '#/components/schemas/BookDto'
 
-REQUEST BODY: {
-    "firstName": "Janko",
-    "lastName": "Mrkvicka mladsi",
-    "contact": "janko.mrkvicka.mladsi@example.com"
-}
-
-RESPONSE BODY: {
-    "id": 1,
-    "name": "Janko Mrkvicka mladsi",
-    "contact": "janko.mrkvicka.mladsi@example.com"
-}
-```
-
-### Delete customer
-```
-DELETE http://localhost:8080/api/customers/{customerId}
-```
-
-
-## Books
-### Create new book title
-```
-POST http://localhost:8080/api/books
-
-REQUEST BODY: {
-    "authorFirstname":"Peter",
-    "authorLastname" : "Lynch",
-    "title" : "One up on Wall Street",
-    "isbn" : "ISBN12A69C",
-    "count" : 10
-}
-```
-
-### List all book titles
-```
-GET http://localhost:8080/api/books?title=<title search string>
-
-RESPONSE BODY: [
-{
-    "id": 1,
-    "name":"Peter Lynch",
-    "title" : "One up on Wall Street",
-    "isbn" : "ISBN12A69C",
-    "count" : 10
-},
-{
-    ...
-}
-]
-```
-
-### Get book title by id
-```
-GET http://localhost:8080/api/books/{bookId}
-
-RESPONSE BODY: {
-    "id": 1,
-    "authorFirstname":"Peter",
-    "authorLastname" : "Lynch",
-    "title" : "One up on Wall Street",
-    "isbn" : "ISBN12A69C",
-    "count" : 10
-}
-```
-
-### Update book title
-```
-PUT http://localhost:8080/api/books/{bookId}
-
-REQUEST BODY: {
-    "authorFirstname":"Peter",
-    "authorLastname" : "Lynch",
-    "title" : "One up on Wall Street",
-    "isbn" : "ISBN12A69C",
-    "count" : 10
-}
-
-RESPONSE BODY: {
-    "id": 1,
-    "authorFirstname":"Peter",
-    "authorLastname" : "Lynch",
-    "title" : "One up on Wall Street",
-    "isbn" : "ISBN12A69C",
-    "count" : 10
-}
-```
-
-### Delete book title
-```
-DELETE http://localhost:8080/api/books/{bookId}
-```
+    BookCategoryDto:
+      properties:
+        name:
+          type: string
+          example: Sci-fi
 
 
-## Borrowings
-### Create borrowing
-```
-POST http://localhost:8080/api/borrowings
 
-REQUEST BODY: {
-    "customerId": 4,
-    "bookId" : 5
-}
-```
 
-### List borrowings
-```
-GET http://localhost:8080/api/borrowings
 
-RESPONSE BODY: [
-{
-    "id": 1,
-    "customerId" : 1,
-    "customerName": "Janko Mrkvicka",
-    "bookId": 3,
-    "authorName": "J. R. R. Tolkien",
-    "title": "Hobbit"
-},
-{
-    ...
-}
-]
-```
-
-### Get borrowing by id
-```
-GET http://localhost:8080/api/borrowings/{borrowingId}
-
-RESPONSE BODY: {
-    "id": 1,
-    "customerId" : 1,
-    "customerName": "Janko Mrkvicka",
-    "bookId": 3,
-    "authorName": "J. R. R. Tolkien",
-    "title": "Hobbit"
-}
-```
-
-### Return book (delete borrowing)
-```
-DELETE http://localhost:8080/api/borrowing/{id}
 ```
