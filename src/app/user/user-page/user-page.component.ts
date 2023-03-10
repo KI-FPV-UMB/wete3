@@ -1,5 +1,6 @@
 import {Component} from '@angular/core';
 import {User} from '../../common/model/user.model';
+import {UserService} from '../../common/service/user.service';
 
 @Component({
   selector: 'app-user-page',
@@ -12,24 +13,43 @@ export class UserPageComponent {
 
   person?: User;
 
+  constructor(private service: UserService) {
+    this.getPersons();
+  }
+
+  getPersons(): void {
+    this.service.getUsers().subscribe((persons: User[]) => {
+        this.persons = persons;
+    })
+  }
+
   createPerson(person: User): void {
-    this.persons.push(person);
+    this.service.createUser(person)
+      .subscribe(() => {
+        console.log('OSOBA bola uspesne ulozena.')
+        this.getPersons();
+      })
   }
 
   updatePerson(person: User): void {
-    const index = this.persons.findIndex(person => person.id === person.id);
-    if (index !== -1) {
-      this.persons[index] = person;
-      this.person = undefined;
-    }
+    this.service.updateUser(person)
+      .subscribe(() => {
+        console.log('OSOBA bola uspesne upravena.')
+        this.getPersons();
+      })
   }
 
   selectPersonToUpdate(personId: number): void {
-    this.person = this.persons.find(person => person.id === personId);
+    this.service.getUser(personId)
+      .subscribe((person: User) => {
+        this.person = person;
+      })
   }
 
   deletePerson(personId: number): void {
-    const index = this.persons.findIndex(person => person.id === personId);
-    if (index !== -1) { this.persons.splice(index, 1); }
+    this.service.deleteUser(personId).subscribe(() => {
+      console.log('OSOBA bola uspesne zmazana.')
+      this.getPersons();
+    })
   }
 }

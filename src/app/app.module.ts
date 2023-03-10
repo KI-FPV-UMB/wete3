@@ -8,6 +8,8 @@ import { UserFormComponent } from './user/user-form/user-form.component';
 import { UserListComponent } from './user/user-list/user-list.component';
 import { BookPageComponent } from './book/book-page/book-page.component';
 import { BorrowingPageComponent } from './borrowing/borrowing-page/borrowing-page.component';
+import {HttpClientModule} from '@angular/common/http';
+import {UserService} from './common/service/user.service';
 
 @NgModule({
   declarations: [
@@ -23,8 +25,11 @@ import { BorrowingPageComponent } from './borrowing/borrowing-page/borrowing-pag
     FormsModule,
     ReactiveFormsModule,
     AppRoutingModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [
+    UserService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
