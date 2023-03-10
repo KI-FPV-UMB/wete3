@@ -1,27 +1,198 @@
 # Wete3
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.1.5.
+# Specification of project Library
+Basic functions of application:
+- create, edit, delete of book, book category and customer
+- list and show detail of book, book category, customer and borrowings
+- create borrowing and return borrowed book to library
 
-## Development server
+## Domain model
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
 
-## Code scaffolding
+# API
+## Customers
+### Create customer
+```
+POST http://localhost:8080/api/customers
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+REQUEST BODY: {
+"firstname": "Janko",
+"lastname": "Mrkvicka",
+"contact": "janko.mrkvicka@example.com"
+}
+```
 
-## Build
+### List customers
+```
+GET http://localhost:8080/api/customers?lastname=<customer last name search string>
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+RESPONSE BODY: [
+    {
+    "id": 1,
+    "name": "Janko Mrkvicka",
+    "contact": "janko.mrkvicka@example.com"
+    },
+    {
+    "id": 2,
+    "name": "Jozko Hrach",
+    "contact": "jozko.hrach@example.com"    
+    }
+]
+```
 
-## Running unit tests
+### Get customer by id
+```
+GET http://localhost:8080/api/customers/{customerId}
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+RESPONSE BODY: {
+    "id": 1,
+    "name": "Janko Mrkvicka",
+    "contact": "janko.mrkvicka@example.com"
+}
+```
 
-## Running end-to-end tests
+### Update customer
+```
+PUT http://localhost:8080/api/customers/{customerId}
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+REQUEST BODY: {
+    "firstName": "Janko",
+    "lastName": "Mrkvicka mladsi",
+    "contact": "janko.mrkvicka.mladsi@example.com"
+}
 
-## Further help
+RESPONSE BODY: {
+    "id": 1,
+    "name": "Janko Mrkvicka mladsi",
+    "contact": "janko.mrkvicka.mladsi@example.com"
+}
+```
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+### Delete customer
+```
+DELETE http://localhost:8080/api/customers/{customerId}
+```
+
+
+## Books
+### Create new book title
+```
+POST http://localhost:8080/api/books
+
+REQUEST BODY: {
+    "authorFirstname":"Peter",
+    "authorLastname" : "Lynch",
+    "title" : "One up on Wall Street",
+    "isbn" : "ISBN12A69C",
+    "count" : 10
+}
+```
+
+### List all book titles
+```
+GET http://localhost:8080/api/books?title=<title search string>
+
+RESPONSE BODY: [
+{
+    "id": 1,
+    "name":"Peter Lynch",
+    "title" : "One up on Wall Street",
+    "isbn" : "ISBN12A69C",
+    "count" : 10
+},
+{
+    ...
+}
+]
+```
+
+### Get book title by id
+```
+GET http://localhost:8080/api/books/{bookId}
+
+RESPONSE BODY: {
+    "id": 1,
+    "authorFirstname":"Peter",
+    "authorLastname" : "Lynch",
+    "title" : "One up on Wall Street",
+    "isbn" : "ISBN12A69C",
+    "count" : 10
+}
+```
+
+### Update book title
+```
+PUT http://localhost:8080/api/books/{bookId}
+
+REQUEST BODY: {
+    "authorFirstname":"Peter",
+    "authorLastname" : "Lynch",
+    "title" : "One up on Wall Street",
+    "isbn" : "ISBN12A69C",
+    "count" : 10
+}
+
+RESPONSE BODY: {
+    "id": 1,
+    "authorFirstname":"Peter",
+    "authorLastname" : "Lynch",
+    "title" : "One up on Wall Street",
+    "isbn" : "ISBN12A69C",
+    "count" : 10
+}
+```
+
+### Delete book title
+```
+DELETE http://localhost:8080/api/books/{bookId}
+```
+
+
+## Borrowings
+### Create borrowing
+```
+POST http://localhost:8080/api/borrowings
+
+REQUEST BODY: {
+    "customerId": 4,
+    "bookId" : 5
+}
+```
+
+### List borrowings
+```
+GET http://localhost:8080/api/borrowings
+
+RESPONSE BODY: [
+{
+    "id": 1,
+    "customerId" : 1,
+    "customerName": "Janko Mrkvicka",
+    "bookId": 3,
+    "authorName": "J. R. R. Tolkien",
+    "title": "Hobbit"
+},
+{
+    ...
+}
+]
+```
+
+### Get borrowing by id
+```
+GET http://localhost:8080/api/borrowings/{borrowingId}
+
+RESPONSE BODY: {
+    "id": 1,
+    "customerId" : 1,
+    "customerName": "Janko Mrkvicka",
+    "bookId": 3,
+    "authorName": "J. R. R. Tolkien",
+    "title": "Hobbit"
+}
+```
+
+### Return book (delete borrowing)
+```
+DELETE http://localhost:8080/api/borrowing/{id}
+```
