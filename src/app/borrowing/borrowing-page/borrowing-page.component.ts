@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
+import {UserService} from '../../common/service/user.service';
+import {User} from '../../common/model/user.model';
 
 @Component({
   selector: 'app-borrowing-page',
@@ -7,4 +9,15 @@ import { Component } from '@angular/core';
 })
 export class BorrowingPageComponent {
 
+  users?: User[];
+
+  constructor(private userService: UserService) {
+    this.getUsers();
+  }
+
+  getUsers(): void {
+    this.userService.getUsers().subscribe(users => {
+      this.users = users;
+    })
+  }
 }

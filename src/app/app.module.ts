@@ -12,6 +12,7 @@ import {HttpClientModule} from '@angular/common/http';
 import {UserService} from './common/service/user.service';
 import {AngularToastifyModule, ToastService} from 'angular-toastify';
 import { UserDetailPageComponent } from './user/user-detail-page/user-detail-page.component';
+import { BorrowingFormComponent } from './borrowing/borrowing-form/borrowing-form.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { UserDetailPageComponent } from './user/user-detail-page/user-detail-pag
     BookPageComponent,
     BorrowingPageComponent,
     UserDetailPageComponent,
+    BorrowingFormComponent,
   ],
   imports: [
     BrowserModule,
