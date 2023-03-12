@@ -22,13 +22,16 @@ export class UserFormComponent {
   @Output()
   formUpdate = new EventEmitter<User>();
 
+  @Output()
+  formCancel = new EventEmitter<void>();
+
   form: FormGroup;
 
   constructor() {
     this.form = new FormGroup({
       id: new FormControl(null),
-      name: new FormControl(null, Validators.required),
-      surname: new FormControl(null, [Validators.required, Validators.minLength(3)])
+      firstName: new FormControl(null, Validators.required),
+      lastName: new FormControl(null, [Validators.required, Validators.minLength(3)])
     })
   }
 
@@ -39,15 +42,14 @@ export class UserFormComponent {
       } else {
         this.formCreate.emit(this.prepareUser());
       }
-      this.form.reset();
     }
   }
 
   private prepareUser(id?: number): User {
     return {
       id: id !== undefined ? id : Date.now(),
-      name: this.form.controls.name.value,
-      surname: this.form.controls.surname.value,
+      firstName: this.form.controls.firstName.value,
+      lastName: this.form.controls.lastName.value,
     };
   }
 }
