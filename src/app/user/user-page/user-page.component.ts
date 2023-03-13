@@ -1,6 +1,8 @@
 import {Component} from '@angular/core';
 import {User} from '../../common/model/user.model';
 import {UserService} from '../../common/service/user.service';
+import {ToastService} from "angular-toastify";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-user-page',
@@ -13,7 +15,7 @@ export class UserPageComponent {
 
   person?: User;
 
-  constructor(private service: UserService) {
+  constructor(private service: UserService, private toastService: ToastService, private router: Router) {
     this.getPersons();
   }
 
@@ -21,6 +23,10 @@ export class UserPageComponent {
     this.service.getUsers().subscribe((persons: User[]) => {
         this.persons = persons;
     })
+  }
+
+  selectPersonToUpdate(personId: number): void{
+    this.router.navigate(['user', personId])
   }
 
   createPerson(person: User): void {
@@ -31,6 +37,8 @@ export class UserPageComponent {
       })
   }
 
+
+
   updatePerson(person: User): void {
     this.service.updateUser(person)
       .subscribe(() => {
@@ -39,17 +47,22 @@ export class UserPageComponent {
       })
   }
 
-  selectPersonToUpdate(personId: number): void {
-    this.service.getUser(personId)
-      .subscribe((person: User) => {
-        this.person = person;
-      })
-  }
+  // selectPersonToUpdate(personId: number): void {
+  //   this.service.getUser(personId)
+  //     .subscribe((person: User) => {
+  //       this.person = person;
+  //     })
+  // }
 
   deletePerson(personId: number): void {
-    this.service.deleteUser(personId).subscribe(() => {
-      console.log('OSOBA bola uspesne zmazana.')
-      this.getPersons();
-    })
+    if(window.confirm('Naozaj chcete zmzat osobu?')){
+      this.service.deleteUser(personId).subscribe(() => {
+        this.toastService.success("Osoba bola uspesne odstranena");
+        console.log('OSOBA bola uspesne zmazana.');
+        this.getPersons();
+      }, () => {
+        this.toastService.error("Chyba. Osoba nebola zmazana.")
+      })
+    }
   }
 }

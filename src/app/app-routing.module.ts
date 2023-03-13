@@ -21,6 +21,9 @@ const routes: Routes = [
     path: '',
     redirectTo: 'user',
     pathMatch: 'full'
+  },
+  {
+    path: 'user/:userId'
   }
 ];
 
