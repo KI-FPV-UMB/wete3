@@ -1,27 +1,37 @@
 # Wete3
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.1.5.
+# Specification of project Library
+Basic functions of application:
+- create, edit, delete of book, book category and customer
+- list and show detail of book, book category, customer and borrowings
+- create borrowing and return borrowed book to library
+- add/delete book category to/from book 
 
-## Development server
+## Domain model
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+![file](specification/diagram/model.png)
 
-## Code scaffolding
+## FE requirements
+- features of application separated into own directories (Books, BookCategories, Customers, Borrowings)
+- each feature has its own service and model
+- each feature is composed of components for 
+  - page (parent component)
+  - list (child component)
+  - form (child component)
+  - detail
+- usage of Angular Forms
+- implemented validators in all forms
+- navigation between features is handles by Routing
+- communication between parent and child components is handled by @Input and @Output
+- communication between Angular application and Spring Boot application is handled via REST calls implemented in services
+- subscriptions are correctly unsubscribed
+- data are correctly shown and saved from/into server (Spring Boot application)
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-## Build
+# API
+API is specified using OpenAPI v3. You can render this API via [Swagger editor](https://editor.swagger.io/).
+Please copy OpenAPI content into Swagger editor to render it. 
+You can find OpenAPI specification for this application [here](specification/openapi.md).
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+# Visualizations
+Screens of sample application can be found [here](specification/visualizations.md).
