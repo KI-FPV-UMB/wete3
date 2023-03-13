@@ -90,18 +90,19 @@ paths:
       summary: Get all books or filtered by name
       operationId: getBooks
       parameters:
-        - name: firstName
+        - name: name
           in: query
-          description: First name to filter with
+          description: Name of book to filter with
           required: false
           schema:
             type: string
-        - name: lastName
+        - name: categoryId
           in: query
-          description: Last name to filter with
+          description: Book category to filter with
           required: false
           schema:
-            type: string
+            type: int
+            format: int64
       responses:
         '200':
           description: Successful operation
@@ -175,7 +176,7 @@ paths:
       responses:
         '400':
           description: Bad request
-          
+
   /customers:
     post:
       tags:
@@ -229,7 +230,7 @@ paths:
                 $ref: '#/components/schemas/CustomersDto'
         '405':
           description: Invalid input
-          
+
   /customers/{customerId}:
     get:
       tags:
@@ -328,7 +329,7 @@ paths:
       parameters:
         - name: name
           in: query
-          description: First name to filter with
+          description: Name of category to filter with
           required: false
           schema:
             type: string
@@ -341,7 +342,7 @@ paths:
                 $ref: '#/components/schemas/BookCategoriesDto'
         '405':
           description: Invalid input
-          
+
   /bookCategories/{bookCategoryId}:
     get:
       tags:
@@ -452,8 +453,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/BorrowingsDto'
         '405':
-          description: Invalid input  
-          
+          description: Invalid input
+
   /borrowing/{borrowingId}:
     get:
       tags:
@@ -533,8 +534,10 @@ components:
           format: int64
           example: 117
           default: 0
-        category:
-          $ref: '#/components/schemas/BookCategoryDto'
+        bookCategoryId:
+          type: int
+          format: int64
+          example: 46
 
     BookDto:
       properties:
@@ -564,7 +567,7 @@ components:
           items:
             $ref: '#/components/schemas/BookDto'
 
-          
+
     CreateBookCategoryDto:
       required:
         - name
@@ -582,14 +585,14 @@ components:
         name:
           type: string
           example: Sci-fi
-    
+
     BookCategoriesDto:
       properties:
         bookCategoriess:
           type: array
           items:
             $ref: '#/components/schemas/BookCategoryDto'
-    
+
     CreateCustomerDto:
       required:
         - firstName
@@ -620,12 +623,12 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CustomerDto'
-            
+
     CreateBorrowingDto:
       required:
         - name
       properties:
-        book: 
+        book:
           $ref: '#/components/schemas/BookDto'
         customer:
           $ref: '#/components/schemas/CustomerDto'
@@ -637,7 +640,7 @@ components:
           type: integer
           format: int64
           example: 10
-        book: 
+        book:
           $ref: '#/components/schemas/BookDto'
         customer:
           $ref: '#/components/schemas/CustomerDto'
@@ -649,8 +652,4 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/BorrowingDto'
-
-
-
-
 ```
