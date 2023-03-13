@@ -101,7 +101,7 @@ paths:
           description: Book category to filter with
           required: false
           schema:
-            type: int
+            type: integer
             format: int64
       responses:
         '200':
@@ -159,6 +159,8 @@ paths:
       responses:
         '405':
           description: Invalid input
+        '200':
+          description: Ok
 
     delete:
       tags:
@@ -176,6 +178,62 @@ paths:
       responses:
         '400':
           description: Bad request
+        '200':
+          description: Ok
+
+  /books/{bookId}/bookCategory/{bookCategoryId}:
+    put:
+      tags:
+        - books
+      summary: Updates a book
+      operationId: updateSpecificBookCategory
+      parameters:
+        - name: bookId
+          in: path
+          description: ID of book that needs to be updated
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: bookCategoryId
+          in: path
+          description: ID of bookCategory that needs to be updated
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '405':
+          description: Invalid input
+        '200':
+          description: Ok
+
+    delete:
+      tags:
+        - books
+      summary: Deletes a book
+      operationId: deleteSpecificBookCategory
+      parameters:
+        - name: bookId
+          in: path
+          description: ID of book that needs to be updated
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: bookCategoryId
+          in: path
+          description: ID of bookCategory that needs to be updated
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '400':
+          description: Bad request
+        '200':
+          description: Ok
+
 
   /customers:
     post:
@@ -439,12 +497,20 @@ paths:
       summary: Get all borrowings or filtered by name
       operationId: getBorrowings
       parameters:
-        - name: name
+        - name: bookID
           in: query
-          description: Name to filter with
+          description: BookId to filter with
           required: false
           schema:
-            type: string
+            type: integer
+            format: int64
+        - name: customerID
+          in: query
+          description: CustomerId to filter with
+          required: false
+          schema:
+            type: integer
+            format: int64
       responses:
         '200':
           description: Successful operation
@@ -475,7 +541,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BookDto'
+                $ref: '#/components/schemas/BorrowingDto'
         '400':
           description: Bad request
         '404':
@@ -534,10 +600,10 @@ components:
           format: int64
           example: 117
           default: 0
-        bookCategoryId:
-          type: int
-          format: int64
-          example: 46
+        bookCategories:
+          type: array
+          items:
+            $ref: '#/components/schemas/BookCategoriesDto'
 
     BookDto:
       properties:
@@ -549,7 +615,7 @@ components:
           type: string
           example: Surely you're joking Mr Feynman!
         category:
-          $ref: '#/components/schemas/BookCategoryDto'
+          $ref: '#/components/schemas/BookCategoriesDto'
         number:
           type: integer
           format: int64
@@ -597,6 +663,7 @@ components:
       required:
         - firstName
         - lastName
+        - email
       properties:
         firstname:
           type: string
@@ -604,6 +671,9 @@ components:
         lastName:
           type: string
           example: Carrot
+        email:
+          type: string
+          example: john.carrot@mail.com
 
     CustomerDto:
       properties:
@@ -617,6 +687,9 @@ components:
         lastName:
           type: string
           example: Carrot
+        email:
+          type: string
+          example: john.carrot@mail.com
     CustomersDto:
       properties:
         customers:
@@ -626,14 +699,13 @@ components:
 
     CreateBorrowingDto:
       required:
-        - name
+        - book
+        - customer
       properties:
         book:
           $ref: '#/components/schemas/BookDto'
         customer:
           $ref: '#/components/schemas/CustomerDto'
-        category:
-          $ref: '#/components/schemas/BookCategoryDto'
     BorrowingDto:
       properties:
         id:
@@ -644,8 +716,6 @@ components:
           $ref: '#/components/schemas/BookDto'
         customer:
           $ref: '#/components/schemas/CustomerDto'
-        category:
-          $ref: '#/components/schemas/BookCategoryDto'
     BorrowingsDto:
       properties:
         borrowings:
