@@ -659,13 +659,18 @@ components:
 
     CreateBorrowingDto:
       required:
-        - book
-        - customer
+        - bookId
+        - customerId
       properties:
-        book:
-          $ref: '#/components/schemas/BookDto'
-        customer:
-          $ref: '#/components/schemas/CustomerDto'
+        bookId:
+          type: integer
+          format: int64
+          example: 1
+        customerId:
+          type: integer
+          format: int64
+          example: 10
+          
     BorrowingDto:
       properties:
         id:
