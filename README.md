@@ -90,19 +90,18 @@ paths:
       summary: Get all books or filtered by name
       operationId: getBooks
       parameters:
-        - name: name
+        - name: firstName
           in: query
-          description: Name of book to filter with
+          description: First name to filter with
           required: false
           schema:
             type: string
-        - name: categoryId
+        - name: lastName
           in: query
-          description: Book category to filter with
+          description: Last name to filter with
           required: false
           schema:
-            type: int
-            format: int64
+            type: string
       responses:
         '200':
           description: Successful operation
@@ -176,7 +175,7 @@ paths:
       responses:
         '400':
           description: Bad request
-
+          
   /customers:
     post:
       tags:
@@ -230,7 +229,7 @@ paths:
                 $ref: '#/components/schemas/CustomersDto'
         '405':
           description: Invalid input
-
+          
   /customers/{customerId}:
     get:
       tags:
@@ -329,7 +328,7 @@ paths:
       parameters:
         - name: name
           in: query
-          description: Name of category to filter with
+          description: First name to filter with
           required: false
           schema:
             type: string
@@ -342,7 +341,7 @@ paths:
                 $ref: '#/components/schemas/BookCategoriesDto'
         '405':
           description: Invalid input
-
+          
   /bookCategories/{bookCategoryId}:
     get:
       tags:
@@ -436,15 +435,23 @@ paths:
     get:
       tags:
         - borrowings
-      summary: Get all borrowings or filtered by name
+      summary: Get all borrowings or filtered by book or customer
       operationId: getBorrowings
       parameters:
-        - name: name
+        - name: bookId
+          in: query
+          description: Book to filter with
+          required: false
+          schema:
+            type: integer
+            format: int64
+        - name: customerId
           in: query
           description: Name to filter with
           required: false
           schema:
-            type: string
+            type: integer
+            format: int64
       responses:
         '200':
           description: Successful operation
@@ -453,8 +460,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/BorrowingsDto'
         '405':
-          description: Invalid input
-
+          description: Invalid input  
+          
   /borrowing/{borrowingId}:
     get:
       tags:
@@ -475,7 +482,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BookDto'
+                $ref: '#/components/schemas/BorrowingDto'
         '400':
           description: Bad request
         '404':
@@ -534,11 +541,8 @@ components:
           format: int64
           example: 117
           default: 0
-        bookCategoryId:
-          type: int
-          format: int64
-          example: 46
-
+        category:
+          $ref: '#/components/schemas/BookCategoryDto'
     BookDto:
       properties:
         id:
@@ -567,7 +571,7 @@ components:
           items:
             $ref: '#/components/schemas/BookDto'
 
-
+          
     CreateBookCategoryDto:
       required:
         - name
@@ -575,7 +579,6 @@ components:
         name:
           type: string
           example: Sci-fi
-
     BookCategoryDto:
       properties:
         id:
@@ -585,18 +588,18 @@ components:
         name:
           type: string
           example: Sci-fi
-
     BookCategoriesDto:
       properties:
         bookCategoriess:
           type: array
           items:
             $ref: '#/components/schemas/BookCategoryDto'
-
+    
     CreateCustomerDto:
       required:
         - firstName
         - lastName
+        - email
       properties:
         firstname:
           type: string
@@ -604,7 +607,6 @@ components:
         lastName:
           type: string
           example: Carrot
-
     CustomerDto:
       properties:
         id:
@@ -623,29 +625,26 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CustomerDto'
-
+            
     CreateBorrowingDto:
       required:
-        - name
+        - book
+        - customer
       properties:
-        book:
+        book: 
           $ref: '#/components/schemas/BookDto'
         customer:
           $ref: '#/components/schemas/CustomerDto'
-        category:
-          $ref: '#/components/schemas/BookCategoryDto'
     BorrowingDto:
       properties:
         id:
           type: integer
           format: int64
           example: 10
-        book:
+        book: 
           $ref: '#/components/schemas/BookDto'
         customer:
           $ref: '#/components/schemas/CustomerDto'
-        category:
-          $ref: '#/components/schemas/BookCategoryDto'
     BorrowingsDto:
       properties:
         borrowings:
