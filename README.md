@@ -36,6 +36,7 @@ class Borrowing {
 
 # API
 API is specified using OpenAPI v3. You can render this API via [Swagger editor](https://editor.swagger.io/).
+Please copy OpenAPI into Swagger editor
 
 ## OpenAPI
 ```yaml
@@ -64,7 +65,7 @@ paths:
       summary: Create book
       operationId: createBook
       requestBody:
-        description: Update an existent pet in the store
+        description: Update an existent book in the store
         content:
           application/json:
             schema:
@@ -182,7 +183,7 @@ paths:
       summary: Create customer
       operationId: createCustomer
       requestBody:
-        description: Update an existent pet in the store
+        description: Update an existent customer in the store
         content:
           application/json:
             schema:
@@ -648,7 +649,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/BorrowingDto'
-
 
 
 
