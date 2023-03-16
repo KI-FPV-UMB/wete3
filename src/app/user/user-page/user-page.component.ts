@@ -1,9 +1,11 @@
-import {Component} from '@angular/core';
+import {Component, TemplateRef} from '@angular/core';
 import {User} from '../../common/model/user.model';
 import {UserService} from '../../common/service/user.service';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {ToastService} from 'angular-toastify';
 import {Router} from '@angular/router';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {debounceTime, distinctUntilChanged, map, Observable, OperatorFunction} from 'rxjs';
 
 @UntilDestroy()
 @Component({
@@ -15,9 +17,14 @@ export class UserPageComponent {
 
   persons: Array<User> = [];
 
+  formatter = (item: User) => {
+    return item.lastName;
+  };
+
   constructor(private service: UserService,
               private toastService: ToastService,
-              private router: Router) {
+              private router: Router,
+              private modalService: NgbModal) {
     this.getPersons();
   }
 
@@ -25,6 +32,11 @@ export class UserPageComponent {
     this.service.getUsers().pipe(untilDestroyed(this)).subscribe((persons: User[]) => {
       this.persons = persons;
     });
+  }
+
+  openModal(content: TemplateRef<any>): void {
+    this.modalService.open(content,
+      { size: 'sm' });
   }
 
   createPerson(person: User): void {
@@ -50,4 +62,13 @@ export class UserPageComponent {
       })
     }
   }
+
+  search: OperatorFunction<string, readonly any[]> = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      map((term: string) =>
+        term.length < 2 ? [] : this.persons?.filter((v) => v.lastName.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10),
+      ),
+    );
 }

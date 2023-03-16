@@ -13,6 +13,7 @@ import {UserService} from './common/service/user.service';
 import {AngularToastifyModule, ToastService} from 'angular-toastify';
 import { UserDetailPageComponent } from './user/user-detail-page/user-detail-page.component';
 import { BorrowingFormComponent } from './borrowing/borrowing-form/borrowing-form.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { BorrowingFormComponent } from './borrowing/borrowing-form/borrowing-for
     ReactiveFormsModule,
     AppRoutingModule,
     HttpClientModule,
-    AngularToastifyModule
+    AngularToastifyModule,
+    NgbModule
   ],
   providers: [
     UserService,

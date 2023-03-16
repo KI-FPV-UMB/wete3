@@ -6,7 +6,7 @@ import {User} from '../model/user.model';
 @Injectable()
 export class UserService {
 
-  private url = 'http://labs.fpv.umb.sk:8080/api/customers';
+  private url = 'http://labs.fpv.umb.sk:8081/api/customer';
 
   constructor(private http: HttpClient) {
   }
