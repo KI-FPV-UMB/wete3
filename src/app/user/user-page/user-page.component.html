@@ -5,7 +5,8 @@
 <app-user-list
   [persons]="persons"
   (personToUpdate)="selectPersonToUpdate($event)"
-  (personToDelete)="deletePerson($event)">
+  (personToDelete)="deletePerson($event)"
+  (pageChange)="getPersons($event)">
 </app-user-list>
 
 <ng-template #content let-modal>
@@ -20,5 +21,3 @@
   </div>
 </ng-template>
 
-
-<input id="typeahead-basic" type="text" class="form-control" [ngbTypeahead]="search" [resultFormatter]="formatter" />

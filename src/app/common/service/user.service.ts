@@ -1,18 +1,25 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {User} from '../model/user.model';
+import {User, UserResponse} from '../model/user.model';
+import {Pagination} from '../model/pagination.model';
 
 @Injectable()
 export class UserService {
 
-  private url = 'http://labs.fpv.umb.sk:8081/api/customer';
+  //private url = 'http://labs.fpv.umb.sk:8081/api/customer';
+  private url = 'http://localhost:8080/api/customers';
 
   constructor(private http: HttpClient) {
   }
 
-  getUsers(): Observable<User[]> {
-    return this.http.get<User[]>(this.url);
+  getUsers(pagination: Pagination = {page: 0, size: 10, filter: { lastName: ''}}): Observable<UserResponse> {
+    const params = new HttpParams().appendAll({
+      lastName: pagination.filter.lastName,
+      page: pagination.page,
+      size: pagination.size
+    });
+    return this.http.get<UserResponse>(this.url, {params});
   }
 
   getUser(userId: number): Observable<User> {

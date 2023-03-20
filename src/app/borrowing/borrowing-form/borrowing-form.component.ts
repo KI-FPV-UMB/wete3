@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {User} from '../../common/model/user.model';
+import {User, UserResponse} from '../../common/model/user.model';
 import {FormControl, FormGroup} from '@angular/forms';
 
 @Component({
@@ -10,7 +10,7 @@ import {FormControl, FormGroup} from '@angular/forms';
 export class BorrowingFormComponent {
 
   @Input()
-  users?: User[];
+  users?: UserResponse;
 
   form: FormGroup;
 

@@ -1,11 +1,11 @@
 import {Component, TemplateRef} from '@angular/core';
-import {User} from '../../common/model/user.model';
+import {User, UserResponse} from '../../common/model/user.model';
 import {UserService} from '../../common/service/user.service';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import {ToastService} from 'angular-toastify';
 import {Router} from '@angular/router';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {debounceTime, distinctUntilChanged, map, Observable, OperatorFunction} from 'rxjs';
+import {Pagination} from '../../common/model/pagination.model';
 
 @UntilDestroy()
 @Component({
@@ -15,11 +15,7 @@ import {debounceTime, distinctUntilChanged, map, Observable, OperatorFunction} f
 })
 export class UserPageComponent {
 
-  persons: Array<User> = [];
-
-  formatter = (item: User) => {
-    return item.lastName;
-  };
+  persons?: UserResponse;
 
   constructor(private service: UserService,
               private toastService: ToastService,
@@ -28,15 +24,15 @@ export class UserPageComponent {
     this.getPersons();
   }
 
-  getPersons(): void {
-    this.service.getUsers().pipe(untilDestroyed(this)).subscribe((persons: User[]) => {
+  getPersons(pagination?: Pagination): void {
+    this.service.getUsers(pagination).pipe(untilDestroyed(this)).subscribe((persons: UserResponse) => {
       this.persons = persons;
     });
   }
 
   openModal(content: TemplateRef<any>): void {
     this.modalService.open(content,
-      { size: 'sm' });
+      {size: 'sm'});
   }
 
   createPerson(person: User): void {
@@ -62,13 +58,4 @@ export class UserPageComponent {
       })
     }
   }
-
-  search: OperatorFunction<string, readonly any[]> = (text$: Observable<string>) =>
-    text$.pipe(
-      debounceTime(200),
-      distinctUntilChanged(),
-      map((term: string) =>
-        term.length < 2 ? [] : this.persons?.filter((v) => v.lastName.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10),
-      ),
-    );
 }

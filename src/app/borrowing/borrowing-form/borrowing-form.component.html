@@ -1,7 +1,7 @@
 <form [formGroup]="form" (submit)="saveBorrowing()">
   <label>Používateľ:
     <select type="text" formControlName="user">
-      <option *ngFor="let user of users" [value]="user.id">
+      <option *ngFor="let user of users?.content" [value]="user.id">
         {{ user.firstName + ' ' + user.lastName }}
       </option>
     </select>

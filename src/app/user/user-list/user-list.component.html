@@ -1,10 +1,16 @@
-<table *ngIf="persons.length">
+<form [formGroup]="filterForm" (submit)="filter()">
+  <input formControlName="lastName"/>
+
+  <button type="submit">Filtrovať</button>
+</form>
+
+<table *ngIf="persons?.content?.length">
   <tr>
     <th>Meno</th>
     <th>Priezvisko</th>
     <th style="width: 20px"></th>
   </tr>
-  <tr *ngFor="let person of persons">
+  <tr *ngFor="let person of persons?.content">
     <td>{{ person.firstName }}</td>
     <td>{{ person.lastName }}</td>
     <td>
@@ -17,3 +23,9 @@
     </td>
   </tr>
 </table>
+
+<ngb-pagination [collectionSize]="getTotalElements()"
+                [page]="getPageNumber()"
+                [pageSize]="getPageSize()"
+                (pageChange)="changePage($event)">
+</ngb-pagination>

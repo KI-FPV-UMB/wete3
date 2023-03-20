@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {UserService} from '../../common/service/user.service';
-import {User} from '../../common/model/user.model';
+import {User, UserResponse} from '../../common/model/user.model';
 
 @Component({
   selector: 'app-borrowing-page',
@@ -9,7 +9,7 @@ import {User} from '../../common/model/user.model';
 })
 export class BorrowingPageComponent {
 
-  users?: User[];
+  users?: UserResponse;
 
   constructor(private userService: UserService) {
     this.getUsers();
