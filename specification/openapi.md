@@ -681,6 +681,11 @@ components:
           $ref: '#/components/schemas/BookDto'
         customer:
           $ref: '#/components/schemas/CustomerDto'
+        dateOfBorrowing:
+          type: string
+          format: date
+          example: 2017-07-21
+
     BorrowingsDto:
       properties:
         borrowings:
