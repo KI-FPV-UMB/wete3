@@ -23,6 +23,8 @@ class Customer {
 }
 
 class Borrowing {
++ id: Integer
++ dateOfBorrowing: LocalDate
 }
 
 enum BookStatus {
