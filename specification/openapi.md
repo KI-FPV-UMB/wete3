@@ -1,5 +1,6 @@
 # OpenAPI
 ```yaml
+# OpenAPI
 openapi: 3.0.3
 info:
   title: Wete3 Library - OpenAPI
@@ -171,7 +172,7 @@ paths:
     delete:
       tags:
         - books
-      summary: Deletes a book
+      summary: Deletes a category from book
       operationId: deleteSpecificBookCategory
       parameters:
         - name: bookId
@@ -457,7 +458,7 @@ paths:
       summary: Get all borrowings or filtered by name
       operationId: getBorrowings
       parameters:
-        - name: bookID
+        - name: bookId
           in: query
           description: BookId to filter with
           required: false
@@ -550,20 +551,21 @@ components:
     CreateBookDto:
       required:
         - name
-        - category
+        - author
       properties:
         name:
           type: string
           example: Dune
-        number:
+        author:
+          type: string
+          description: Name of author of the book
+          example: Frank Herbert
+        count:
           type: integer
           format: int64
           example: 117
           default: 0
-        bookCategories:
-          type: array
-          items:
-            $ref: '#/components/schemas/BookCategoriesDto'
+
 
     BookDto:
       properties:
@@ -574,9 +576,15 @@ components:
         name:
           type: string
           example: Surely you're joking Mr Feynman!
-        category:
-          $ref: '#/components/schemas/BookCategoriesDto'
-        number:
+        author:
+          type: string
+          description: Name of author of the book
+          example: Richard P. Feynman
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/BookCategoryDto'
+        count:
           type: integer
           format: int64
           example: 45
@@ -586,6 +594,11 @@ components:
           enum:
             - AVAILABLE
             - NOT_AVAILABLE
+        isbn:
+          type: string
+          example: 9788022213882
+
+
     BooksDto:
       properties:
         books:
@@ -614,7 +627,7 @@ components:
 
     BookCategoriesDto:
       properties:
-        bookCategoriess:
+        bookCategories:
           type: array
           items:
             $ref: '#/components/schemas/BookCategoryDto'
@@ -670,7 +683,7 @@ components:
           type: integer
           format: int64
           example: 10
-          
+
     BorrowingDto:
       properties:
         id:
@@ -692,4 +705,5 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/BorrowingDto'
+
 ```
